@@ -1,21 +1,41 @@
 #!/usr/bin/env python
 
 import os
+import sqlite3
+import time
 
-# pipe = os.popen('tail -f /Users/jelope/Adm/OpenCDN/SRC/CLIENT/data/pipe/receive.pipe')
+#conn database
+conn = sqlite3.connect("/Users/jelope/Adm/openCDN/SRC/CLIENT/data/database/traffic.db")
+sqlite3.isolation_level = None
+db = conn.cursor()
 
-# while 1:
-# 	a = pipe.readline()
-# 	print a
+# init tables
+traffic_sql = open("/Users/jelope/Adm/openCDN/SRC/CLIENT/init/sql/traffic.sql", 'r').read()
+db.execute(traffic_sql)
 
+time_format = '%Y-%m-%d %H:%M:00'
+datas = dict()
 
+# insert datas like {"2014-6-5 14:22:00":{},"2014-6-5 14:23:00":{}}
+# first get current time key,
+# then summarize all other data and flush into the db 
 
-
-# pipe = os.fdopen('/Users/jelope/Adm/OpenCDN/SRC/CLIENT/data/pipe/receive.pipe')
-
-
-pipe = os.open('/Users/jelope/Adm/OpenCDN/SRC/CLIENT/data/pipe/receive.pipe',os.O_RDONLY)
-r = os.fdopen(pipe)
+receive = os.open('/Users/jelope/Adm/OpenCDN/SRC/CLIENT/data/pipe/receive.pipe',os.O_RDONLY)
+recp = os.fdopen(receive)
 while 1:
-	a = r.readline()
-	print a
+
+	raw = recp.readline().rstrip().split('|')
+	keys = ["time", "host", "code", "byte", "byte_req", "time_req", "method", "type"]
+	
+	# if the length of keys not equal to values, get first 6.
+	# because the method&type may input string include |
+	if len(keys) != len(raw) :
+		keys = keys[0:6]
+		raw = raw[0:6]
+
+	data = dict(zip(keys, raw))
+
+	#current_time = time.strftime(time_format, time.localtime())
+	#if current_time in datas:
+
+	print data

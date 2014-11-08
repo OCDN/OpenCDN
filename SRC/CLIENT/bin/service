@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+import sys
+import os
+
+# init the work path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../module")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../lib")))
+
+from tornado import ioloop
+from tornado import web
+
+ROOT = os.path.dirname(__file__)
+
+# import modules
+import module.config 
+
+class MainHandler(web.RequestHandler):
+	def get(self):
+		self.write("Hello, world")
+
+application = web.Application([
+    (r"/", MainHandler),
+])
+
+def prepare():
+	module.config.init_db()
+	print 1
+	print module.config
+	print module
+
+def web():
+	application.listen(8888)
+	ioloop.IOLoop.instance().start()
+
+if __name__ == "__main__":
+	prepare()
+	web()

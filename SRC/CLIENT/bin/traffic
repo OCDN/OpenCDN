@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import os
+
+# pipe = os.popen('tail -f /Users/jelope/Adm/OpenCDN/SRC/CLIENT/data/pipe/receive.pipe')
+
+# while 1:
+# 	a = pipe.readline()
+# 	print a
+
+
+
+
+# pipe = os.fdopen('/Users/jelope/Adm/OpenCDN/SRC/CLIENT/data/pipe/receive.pipe')
+
+
+pipe = os.open('/Users/jelope/Adm/OpenCDN/SRC/CLIENT/data/pipe/receive.pipe',os.O_RDONLY)
+r = os.fdopen(pipe)
+while 1:
+	a = r.readline()
+	print a

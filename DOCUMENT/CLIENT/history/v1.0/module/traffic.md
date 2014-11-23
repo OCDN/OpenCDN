@@ -9,6 +9,7 @@ client traffice 实时流量摘要模块
 
 # 关键点
 - 同一个域名的必须打到同一个traffic,否则会影响汇总
+- 如果日志太少，少于1分钟1条，应该如何应对
 
 # 日志摘要格式
 
@@ -23,6 +24,11 @@ client traffice 实时流量摘要模块
   - $request_time 用户请求时间
   - 把request_method和content_type放在最后的原因是可能存在攻击字符
 
+# 实现逻辑
+	
+- 读取pipe，发现存在非本分钟的数据，同步汇总
+- 汇总完毕继续读取pipe
+
 # 数据库
 
 ## traffic.db/data
@@ -30,7 +36,7 @@ client traffice 实时流量摘要模块
 |-------|------|-----|
 | **app_id** | int | 应用ID |
 | **time**| int | 时间(分钟)|
-| domain| text | 域名(默认情况下为空，只有开启了分域名统计才会填入域名)|
+| **domain**| text | 域名(默认情况下为空，只有开启了分域名统计才会填入域名)|
 | pv| int| 访问pv|
 | pv_hit| int| 命中访问pv|
 | pv_2xx| int| 2xx访问统计|

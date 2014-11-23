@@ -5,8 +5,10 @@ import os
 
 # init the work path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../module")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../module")))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../lib")))
+
+path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
 
 from tornado import ioloop
 from tornado import web
@@ -21,14 +23,11 @@ class MainHandler(web.RequestHandler):
 		self.write("Hello, world")
 
 application = web.Application([
-    (r"/", MainHandler),
+	(r"/", MainHandler),
 ])
 
 def prepare():
-	module.config.init_db()
-	print 1
-	print module.config
-	print module
+	module.config.__init__()
 
 def web():
 	application.listen(8888)

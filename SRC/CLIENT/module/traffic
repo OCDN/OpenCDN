@@ -22,7 +22,7 @@ datas = dict()
 
 receive = os.open('/Users/jelope/Adm/OpenCDN/SRC/CLIENT/data/pipe/receive.pipe',os.O_RDONLY)
 recp = os.fdopen(receive)
-while 1:
+while True:
 
 	raw = recp.readline().rstrip().split('|')
 	keys = ["time", "host", "code", "byte", "byte_req", "time_req", "method", "type"]

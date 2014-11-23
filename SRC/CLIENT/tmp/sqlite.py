@@ -2,8 +2,11 @@
 
 import sqlite3
 
-cx = sqlite3.connect("/Users/jelope/Adm/openCDN/SRC/CLIENT/data/database/traffic.db")
+conn = sqlite3.connect("/Users/jelope/Adm/openCDN/SRC/CLIENT/data/database/traffic.db")
 sqlite3.isolation_level = None
+db = conn.cursor()
 
-f = open("/Users/jelope/Adm/openCDN/SRC/CLIENT/init/sql/traffic.sql", 'r')
-get = f.read()
+sql = "select * from data"
+db.execute(sql)
+res = db.fetchall()
+print res
